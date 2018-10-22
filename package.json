@@ -1,0 +1,36 @@
+{
+  "name": "double-pendulum",
+  "version": "1.0.0",
+  "description": "Double Pendulum Simulation",
+  "dependencies": {
+    "dat.gui": "0.7.3",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "style-loader": "0.23.1",
+    "webpack": "4.22.0",
+    "webpack-cli": "3.1.2",
+    "webpack-dev-server": "3.1.9"
+  },
+  "scripts": {
+    "test": "test",
+    "build": "npx webpack",
+    "start": "npx webpack-dev-server --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lemmingapex/double-pendulum.git"
+  },
+  "keywords": [
+    "double",
+    "pendulum",
+    "simulation"
+  ],
+  "author": "Scott",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lemmingapex/double-pendulum/issues"
+  },
+  "homepage": "https://github.com/lemmingapex/double-pendulum#readme"
+}
