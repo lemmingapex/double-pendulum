@@ -1,20 +1,16 @@
 import * as dat from "dat.gui";
-import _ from "lodash";
+import { assign, cloneDeep } from "lodash";
 
 export class GUI {
-	constructor() {
-		this.defaultDatSettings = {
-			mass1: 1
-		}
-
-		this.datSettings = {
-			...this.defaultDatSettings
-		}
+	constructor(parameters) {
+		this.defaultDatSettings = cloneDeep(parameters);
+		this.parameters = parameters;
 
 		const datGUI = new dat.GUI();
 		datGUI.add({"reset": () => {
-			_.assign(this.datSettings, this.defaultDatSettings);
+			assign(this.parameters, this.defaultDatSettings);
 		}}, "reset").name("Reset");
-		datGUI.add(this.datSettings, "mass1", 1, 10).step(1).name("Mass 1").listen();
+		datGUI.add(this.parameters, "m1", 0.1, 10.0).step(0.1).name("Mass 1 (kg)").listen();
+		datGUI.add(this.parameters, "l1", 0.10, 1.00).step(0.01).name("Length 1 (m)").listen();
 	}
 }
