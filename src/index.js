@@ -1,24 +1,29 @@
 import * as settingsGui from "./settings-gui.js";
 import * as canvasDrawing from "./canvas-drawing.js";
+import RK4 from "./runge-kutta-4.js";
 
 import "./main.css";
 
 class main {
 	constructor() {
+		this.min_m = 0.1;
+		this.max_m = 10.0;
+		this.min_m_radius = Math.pow(0.75*this.min_m/Math.PI, 1.0/3.0);
+		this.max_m_radius = Math.pow(0.75*this.max_m/Math.PI, 1.0/3.0);
+
 		this.parameters = {
-			"h": 0.025,
-			"g": -9.807,
-			"m1": 1.0,
+			"h": 0.0125,
+			"g": 9.807,
+			"m1": 2.0,
 			"l1": 1.00,
-			"th1": Math.PI/4.0,
+			"th1": Math.PI/6.0,
 			"dth1": 0.0,
-			"ddth1": 0.0,
-			"m2": 0.5,
-			"l2": 0.50,
-			"th2": -Math.PI/4.0,
-			"dth2": 0.0,
-			"ddth2": 0.0
+			"m2": 1.5,
+			"l2": 0.80,
+			"th2": -Math.PI/6.0,
+			"dth2": 0.0
 		};
+		this.odeSolver = new RK4();
 
 		// add the settings GUI to the page
 		const settingsGUI = new settingsGui.GUI(this.parameters);
@@ -39,26 +44,22 @@ class main {
 		}
 	};
 
-	// length_px_range = {
-	// 	"min": Math.min(canvas.width, canvas.height)/12,
-	// 	"max": Math.min(canvas.width, canvas.height)/6
-	// };
-
-	convert_l_to_px = (l) => {
-		// const { min, max } = this.length_px_range;
-		// TODO : calculate distance based on pixel values
-		return (l*200);
+	radius_px_range = () => {
+		return {
+			"min": (Math.min(this.canvas.width, this.canvas.height)/100),
+			"max": (Math.min(this.canvas.width, this.canvas.height)/35)
+		}
 	};
 
-	// radius_px_range = {
-	// 	"min": 10,
-	// 	"max": 20
-	// };
+	convert_l_to_px = (l) => {
+		return l*((Math.min(this.canvas.width, this.canvas.height)/4) - this.radius_px_range().max);;
+	};
 
 	convert_m_to_px = (m) => {
-		// TODO : calculate radius based on mass, assume a constant density
-		// return Math.pow(0.75*m/Math.PI, 1.0/3.0);
-		return 15.0;
+		const radius = Math.pow(0.75*m/Math.PI, 1.0/3.0);
+		const normlized_radius = ((radius - this.min_m_radius)/(this.max_m_radius - this.min_m_radius));
+		const radius_px = normlized_radius*(this.radius_px_range().max-this.radius_px_range().min) + this.radius_px_range().min;
+		return radius_px;
 	};
 
 	draw = () => {
@@ -84,19 +85,32 @@ class main {
 		canvasDrawing.drawCircle(canvas, x2_px, y2_px, r2_px);
 	};
 
+	calculateDerivatives = (parameters) => {
+		const { g, h, m1, l1, th1, dth1, m2, l2, th2, dth2 } = parameters;
+		let ddth1 = l1*m2*dth1*dth1*Math.sin((2*th1)-(2*th2));
+		ddth1 += 2*l2*m2*dth2*dth2*Math.sin(th1-th2);
+		ddth1 += 2*g*m1*Math.sin(th1);
+		ddth1 += g*m2*Math.sin(th1);
+		ddth1 += g*m2*Math.sin(th1-(2*th2));
+		ddth1 /= -l1*(2*m1+m2-m2*Math.cos((2*th1)-(2*th2)));
+
+		let ddth2 = 2*l1*m1*dth1*dth1*Math.sin(th1-th2);
+		ddth2 += 2*l1*m2*dth1*dth1*Math.sin(th1-th2);
+		ddth2 += l2*m2*dth2*dth2*Math.sin((2*th1)-(2*th2));
+		ddth2 -= g*m1*Math.sin(th2);
+		ddth2 += g*m1*Math.sin((2*th1)-th2);
+		ddth2 -= g*m2*Math.sin(th2);
+		ddth2 += g*m2*Math.sin(2*th1-th2);
+		ddth2 /= l2*(2*m1+m2-m2*Math.cos((2*th1)-(2*th2)));
+
+		// change in { th1, dth1, th2, dth2 }
+		return { dth1, ddth1, dth2, ddth2 };
+	}
+
 	runSimulation = () => {
 		this.draw();
-		this.takeStep();
+		this.odeSolver.takeStep(this.parameters, this.calculateDerivatives);
 	};
-
-	takeStep = () => {
-		console.log("take a step");
-		const { g, h, m1, l1, m2, l2 } = this.parameters;
-
-		// do all the important stuff here
-		this.parameters.th1 += .001;
-		this.parameters.th2 -= .01;
-	}
 }
 
 new main();
