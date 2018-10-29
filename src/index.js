@@ -32,9 +32,16 @@ class main {
 		this.canvas = document.getElementById("canvas");
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
+		this.fpsContainer = document.getElementById("fps");
+		this.lastLoopTime = new Date().getTime();
+		this.frameTime = 0.0;
 
 		this.runSimulation();
 		setInterval(this.runSimulation, 10);
+
+		setInterval(() => {
+			this.fpsContainer.innerHTML = (1000.0/this.frameTime).toFixed(1) + " fps";
+		}, 500);
 	}
 
 	anchor_px_xy = () => {
@@ -108,8 +115,16 @@ class main {
 	}
 
 	runSimulation = () => {
+		let startTime = new Date().getTime()
+
 		this.draw();
 		this.odeSolver.takeStep(this.parameters, this.calculateDerivatives);
+
+		let thisLoopTime = new Date().getTime()
+		let thisFrameTime = thisLoopTime - this.lastLoopTime;
+		// low pass filter to smooth the result
+		this.frameTime += (thisFrameTime - this.frameTime)/20.0;
+		this.lastLoopTime = thisLoopTime;
 	};
 }
 
