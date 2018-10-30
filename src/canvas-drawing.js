@@ -11,11 +11,11 @@ export const drawLine = (canvas, x1, y1, x2, y2) => {
 	return canvas;
 };
 
-export const drawCircle = (canvas, x, y, r) => {
+export const drawCircle = (canvas, x, y, r, hexColor) => {
 	const context = canvas.getContext("2d");
 	context.beginPath();
 	context.arc(x, y, r, 0, 2*Math.PI, 0);
-	context.fillStyle = "#51a0d1";
+	context.fillStyle = hexColor;
 	context.fill();
 	return canvas;
 };
