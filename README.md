@@ -40,7 +40,7 @@ In order to get the semi-accurate behavior, I am using an explicit [RK4](https:/
 
 ### Other
 
-The chaotic behavior of the masses trajectories at large angles of theta are pretty interesting.
+The chaotic behavior of the trajectory of the second mass at large angles of theta is pretty interesting.
 
 ### Future Work and Ideas
 * Make the simulation more interactive.
