@@ -20,7 +20,7 @@ The equations of motion can be found directly from the equations describing the 
 
 ![equations of motion](./equations_of_motion.jpg)
 
-Using equation [11] & [12] and [1], [2], [3] & [4], two explicit equations for the angular acceleration, θ₁′′ and θ₂′′, can expressed.  I used [mathics](https://mathics.github.io/), a free CAS (computer algebra system), to to the algebra for me:
+Using equation [11] & [12] and [1], [2], [3] & [4], two explicit equations for the angular acceleration, θ₁′′ and θ₂′′, can expressed.  I used [mathics](https://mathics.github.io/), a free CAS (computer algebra system), to do the algebra for me:
 
 ```
 eq1 = x1pp==-1*L1*Sin[t1]*t1p^2 + L1*Cos[t1]*t1pp
@@ -40,7 +40,7 @@ In order to get the semi-accurate behavior, I am using an explicit [RK4](https:/
 
 ### Other
 
-The chaotic behavior of the masses trajectories at large angles of theta are pretty interesting.
+The chaotic behavior of the trajectory of the second mass at large angles of theta is pretty interesting.
 
 ### Future Work and Ideas
 * Make the simulation more interactive.
