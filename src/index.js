@@ -149,4 +149,6 @@ class main {
 	};
 }
 
-new main();
+window.onload = function() {
+	new main();
+};
