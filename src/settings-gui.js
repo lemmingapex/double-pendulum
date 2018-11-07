@@ -11,7 +11,7 @@ export class GUI {
 			assign(this.parameters, this.defaultDatSettings);
 		}}, "reset").name("Reset");
 		datGUI.add(this.parameters, "h", 0.0015, 0.0250).step(0.0005).name("Time Step").listen();
-		datGUI.add(this.parameters, "g", 0.01, 50.0).step(0.01).name("Gravity (m/s²)").listen();
+		datGUI.add(this.parameters, "g", -32.00, 32.00).step(0.001).name("Gravity (m/s²)").listen();
 		datGUI.add(this.parameters, "m1", 0.1, 10.0).step(0.1).name("Mass 1 (kg)").listen();
 		datGUI.add(this.parameters, "l1", 0.10, 1.00).step(0.01).name("Length 1 (m)").listen();
 		datGUI.addColor(this.parameters, "color1").name("Color 1").listen();

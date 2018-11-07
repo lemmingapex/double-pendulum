@@ -13,7 +13,7 @@ class main {
 
 		this.parameters = {
 			"h": 0.00625,
-			"g": 9.807,
+			"g": -9.81,
 			"m1": 1.9,
 			"l1": 1.00,
 			"color1": "#a162d9",
@@ -117,18 +117,18 @@ class main {
 		const { g, h, m1, l1, th1, dth1, m2, l2, th2, dth2 } = parameters;
 		let ddth1 = l1*m2*dth1*dth1*Math.sin((2*th1)-(2*th2));
 		ddth1 += 2*l2*m2*dth2*dth2*Math.sin(th1-th2);
-		ddth1 += 2*g*m1*Math.sin(th1);
-		ddth1 += g*m2*Math.sin(th1);
-		ddth1 += g*m2*Math.sin(th1-(2*th2));
+		ddth1 += -2*g*m1*Math.sin(th1);
+		ddth1 += -g*m2*Math.sin(th1);
+		ddth1 += -g*m2*Math.sin(th1-(2*th2));
 		ddth1 /= -l1*(2*m1+m2-m2*Math.cos((2*th1)-(2*th2)));
 
 		let ddth2 = 2*l1*m1*dth1*dth1*Math.sin(th1-th2);
 		ddth2 += 2*l1*m2*dth1*dth1*Math.sin(th1-th2);
 		ddth2 += l2*m2*dth2*dth2*Math.sin((2*th1)-(2*th2));
-		ddth2 -= g*m1*Math.sin(th2);
-		ddth2 += g*m1*Math.sin((2*th1)-th2);
-		ddth2 -= g*m2*Math.sin(th2);
-		ddth2 += g*m2*Math.sin(2*th1-th2);
+		ddth2 += g*m1*Math.sin(th2);
+		ddth2 += -g*m1*Math.sin((2*th1)-th2);
+		ddth2 += g*m2*Math.sin(th2);
+		ddth2 += -g*m2*Math.sin(2*th1-th2);
 		ddth2 /= l2*(2*m1+m2-m2*Math.cos((2*th1)-(2*th2)));
 
 		// change in { th1, dth1, th2, dth2 }
