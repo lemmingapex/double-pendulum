@@ -16,21 +16,25 @@ class main {
 			"g": -9.81,
 			"m1": 1.9,
 			"l1": 1.00,
+			"init_th1_over_pi": 3.0/4.0 + Math.random()/12.0,
 			"color1": "#a162d9",
 			"m2": 1.6,
 			"l2": 0.85,
+			"init_th2_over_pi": -1.0/6.0 + Math.random()/12.0,
 			"color2": "#0c68cf",
-			"alpha": 0.99
+			"alpha": 0.70
 		};
-		this.odeSolver = new RK4();
+
 
 		// add the settings GUI to the page
 		const settingsGUI = new settingsGui.GUI(this.parameters);
 
-		this.parameters.th1 = 3.0*Math.PI/4.0;
+		this.parameters.th1 = this.parameters.init_th1_over_pi*Math.PI;
 		this.parameters.dth1 = 0.0;
-		this.parameters.th2 = -Math.PI/6.0;
+		this.parameters.th2 = this.parameters.init_th2_over_pi*Math.PI;
 		this.parameters.dth2 = 0.0;
+
+		this.odeSolver = new RK4();
 
 		// somewhere to draw
 		this.canvas_fg = document.getElementById("canvas_fg");
@@ -77,8 +81,15 @@ class main {
 		return radius_px;
 	};
 
+	convert_alpha_to_normalized_log = (alpha) => {
+		const power = 2.0;
+		const alphaLogScale = 1.0 - Math.pow(10, -power*alpha);
+		const alphaMax = 1.0 - Math.pow(10, -power);
+		return 1.0 - alphaLogScale/alphaMax;
+	};
+
 	draw = () => {
-		this.canvas_bg.getContext("2d").fillStyle = "rgba(221, 221, 221, " + (1.0 - this.parameters.alpha) + ")";
+		this.canvas_bg.getContext("2d").fillStyle = "rgba(221, 221, 221, " + this.convert_alpha_to_normalized_log(this.parameters.alpha) + ")";
 		this.canvas_bg.getContext("2d").fillRect(0, 0, this.canvas_bg.width, this.canvas_bg.height);
 		this.canvas_fg.getContext("2d").clearRect(0, 0, this.canvas_fg.width, this.canvas_fg.height);
 		const anchor_px_xy = this.anchor_px_xy();

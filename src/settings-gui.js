@@ -6,10 +6,22 @@ export class GUI {
 		this.defaultDatSettings = cloneDeep(parameters);
 		this.parameters = parameters;
 
-		const datGUI = new dat.GUI();
-		datGUI.add({"reset": () => {
+		const reset = () => {
 			assign(this.parameters, this.defaultDatSettings);
-		}}, "reset").name("Reset");
+		};
+
+		const restart = () => {
+			this.parameters.th1 = this.parameters.init_th1_over_pi*Math.PI;
+			this.parameters.dth1 = 0.0;
+			this.parameters.th2 = this.parameters.init_th2_over_pi*Math.PI;
+			this.parameters.dth2 = 0.0;
+		};
+
+		const datGUI = new dat.GUI();
+		datGUI.add({"reset": reset}, "reset").name("Reset Settings");
+		datGUI.add(this.parameters, "init_th1_over_pi", -1.00, 1.00).step(0.01).name("Inital θ1/π").listen();
+		datGUI.add(this.parameters, "init_th2_over_pi", -1.00, 1.00).step(0.01).name("Inital θ2/π").listen();
+		datGUI.add({"restart": restart}, "restart").name("Restart Sim");
 		datGUI.add(this.parameters, "h", 0.0015, 0.0250).step(0.0005).name("Time Step").listen();
 		datGUI.add(this.parameters, "g", -32.00, 32.00).step(0.001).name("Gravity (m/s²)").listen();
 		datGUI.add(this.parameters, "m1", 0.1, 10.0).step(0.1).name("Mass 1 (kg)").listen();
