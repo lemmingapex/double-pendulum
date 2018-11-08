@@ -1,4 +1,6 @@
-import * as settingsGui from "./settings-gui.js";
+import { debounce } from "lodash";
+
+import * as settingsGui from "./controls-gui.js";
 import * as canvasDrawing from "./canvas-drawing.js";
 import RK4 from "./runge-kutta-4.js";
 
@@ -14,12 +16,12 @@ class main {
 		this.parameters = {
 			"h": 0.00625,
 			"g": -9.81,
-			"m1": 1.9,
-			"l1": 1.00,
+			"m1": 1.7 + 0.6*Math.random(),
+			"l1": 0.75 + 0.20*Math.random(),
 			"init_th1_over_pi": 3.0/4.0 + Math.random()/12.0,
 			"color1": "#a162d9",
-			"m2": 1.6,
-			"l2": 0.85,
+			"m2": 1.7 + 0.6*Math.random(),
+			"l2": 0.75 + 0.20*Math.random(),
 			"init_th2_over_pi": -1.0/6.0 + Math.random()/12.0,
 			"color2": "#0c68cf",
 			"alpha": 0.70
@@ -160,6 +162,16 @@ class main {
 	};
 }
 
+const resizeEvent = debounce(() => {
+	const canvas_fg = document.getElementById("canvas_fg");
+	canvas_fg.width = window.innerWidth;
+	canvas_fg.height = window.innerHeight;
+	const canvas_bg = document.getElementById("canvas_bg");
+	canvas_bg.width = window.innerWidth;
+	canvas_bg.height = window.innerHeight;
+}, 250);
+
+window.addEventListener("resize", resizeEvent, false);
 window.onload = function() {
 	new main();
 };

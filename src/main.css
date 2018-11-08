@@ -9,6 +9,7 @@ body {
 	letter-spacing: -1px;
 	color: #222244;
 	pointer-events: none;
+	user-select: none;
 }
 
 canvas {
