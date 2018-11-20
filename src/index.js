@@ -2,6 +2,7 @@ import { debounce } from "lodash";
 
 import * as settingsGui from "./controls-gui.js";
 import * as canvasDrawing from "./canvas-drawing.js";
+import * as colorUtils from "./color-utils.js";
 import RK4 from "./runge-kutta-4.js";
 
 import "./main.css";
@@ -13,17 +14,22 @@ class main {
 		this.min_m_radius = Math.pow(0.75*this.min_m/Math.PI, 1.0/3.0);
 		this.max_m_radius = Math.pow(0.75*this.max_m/Math.PI, 1.0/3.0);
 
+		const hue1 = Math.random()*360.0;
+		const hue2 = (hue1+180.0)%360.0;
+		const color1 = colorUtils.hslToHex(hue1, 0.5 + Math.random()*0.2, 0.5 + Math.random()*0.2)
+		const color2 = colorUtils.hslToHex(hue2, 0.5 + Math.random()*0.2, 0.5 + Math.random()*0.2)
+
 		this.parameters = {
 			"h": 0.00625,
 			"g": -9.81,
 			"m1": 1.7 + 0.6*Math.random(),
 			"l1": 0.75 + 0.20*Math.random(),
 			"init_th1_over_pi": 3.0/4.0 + Math.random()/12.0,
-			"color1": "#a162d9",
+			"color1": color1,
 			"m2": 1.7 + 0.6*Math.random(),
 			"l2": 0.75 + 0.20*Math.random(),
 			"init_th2_over_pi": -1.0/6.0 + Math.random()/12.0,
-			"color2": "#0c68cf",
+			"color2": color2,
 			"alpha": 0.70
 		};
 
@@ -94,6 +100,7 @@ class main {
 		this.canvas_bg.getContext("2d").fillStyle = "rgba(221, 221, 221, " + this.convert_alpha_to_normalized_log(this.parameters.alpha) + ")";
 		this.canvas_bg.getContext("2d").fillRect(0, 0, this.canvas_bg.width, this.canvas_bg.height);
 		this.canvas_fg.getContext("2d").clearRect(0, 0, this.canvas_fg.width, this.canvas_fg.height);
+		const line_color = "#223322";
 		const anchor_px_xy = this.anchor_px_xy();
 		const { m1, l1, th1, m2, l2, th2 } = this.parameters;
 
@@ -106,7 +113,7 @@ class main {
 		const l1_minus_r1_px = this.convert_l_to_px(l1) - r1_px;
 		const x1_minus_r1_px = anchor_px_xy.x + l1_minus_r1_px*Math.sin(th1);
 		const y1_minus_r1_px = anchor_px_xy.y + l1_minus_r1_px*Math.cos(th1);
-		canvasDrawing.drawLine(this.canvas_fg, anchor_px_xy.x, anchor_px_xy.y, x1_minus_r1_px, y1_minus_r1_px);
+		canvasDrawing.drawLine(this.canvas_fg, anchor_px_xy.x, anchor_px_xy.y, x1_minus_r1_px, y1_minus_r1_px, line_color);
 
 		const r2_px = this.convert_m_to_px(m2);
 
@@ -120,7 +127,7 @@ class main {
 		const l2_minus_r2_px = this.convert_l_to_px(l2) - r2_px;
 		const x2_minus_r2_px = x1_px + l2_minus_r2_px*Math.sin(th2);
 		const y2_minus_r2_px = y1_px + l2_minus_r2_px*Math.cos(th2);
-		canvasDrawing.drawLine(this.canvas_fg, x1_plus_r1_px, y2_plus_r1_px, x2_minus_r2_px, y2_minus_r2_px);
+		canvasDrawing.drawLine(this.canvas_fg, x1_plus_r1_px, y2_plus_r1_px, x2_minus_r2_px, y2_minus_r2_px, line_color);
 
 		canvasDrawing.drawCircle(this.canvas_bg, x1_px, y1_px, r1_px, this.parameters.color1);
 		canvasDrawing.drawCircle(this.canvas_bg, x2_px, y2_px, r2_px, this.parameters.color2);

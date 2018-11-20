@@ -1,4 +1,4 @@
-export const drawLine = (canvas, x1, y1, x2, y2) => {
+export const drawLine = (canvas, x1, y1, x2, y2, hexColor) => {
 	const context = canvas.getContext("2d");
 	context.lineWidth = 2;
 	context.beginPath();
@@ -6,7 +6,7 @@ export const drawLine = (canvas, x1, y1, x2, y2) => {
 	context.lineCap = "round";
 	context.moveTo(x1, y1);
 	context.lineTo(x2, y2);
-	context.strokeStyle = "#223322";
+	context.strokeStyle = hexColor;
 	context.stroke();
 	return canvas;
 };
