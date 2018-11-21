@@ -15,9 +15,9 @@ class main {
 		this.max_m_radius = Math.pow(0.75*this.max_m/Math.PI, 1.0/3.0);
 
 		const hue1 = Math.random()*360.0;
-		const hue2 = (hue1+180.0)%360.0;
-		const color1 = colorUtils.hslToHex(hue1, 0.5 + Math.random()*0.2, 0.5 + Math.random()*0.2)
-		const color2 = colorUtils.hslToHex(hue2, 0.5 + Math.random()*0.2, 0.5 + Math.random()*0.2)
+		const hue2 = (hue1+40.0)%360.0;
+		const color1 = colorUtils.hslToHex(hue1, 0.4 + Math.random()*0.4, 0.5 + Math.random()*0.2)
+		const color2 = colorUtils.hslToHex(hue2, 0.4 + Math.random()*0.4, 0.5 + Math.random()*0.2)
 
 		this.parameters = {
 			"h": 0.00625,
