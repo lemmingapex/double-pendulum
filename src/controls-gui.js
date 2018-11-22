@@ -6,8 +6,13 @@ export class GUI {
 		this.defaultDatSettings = cloneDeep(parameters);
 		this.parameters = parameters;
 
+		const datGUI = new dat.GUI();
+
 		const reset = () => {
 			assign(this.parameters, this.defaultDatSettings);
+			datGUI.__controllers.forEach((controller) => {
+				controller.updateDisplay();
+			});
 		};
 
 		const restart = () => {
@@ -17,7 +22,6 @@ export class GUI {
 			this.parameters.dth2 = 0.0;
 		};
 
-		const datGUI = new dat.GUI();
 		datGUI.add({"reset": reset}, "reset").name("Reset Controls");
 		datGUI.add(this.parameters, "init_th1_over_pi", -1.00, 1.00).step(0.01).name("Initial θ1/π");
 		datGUI.add(this.parameters, "init_th2_over_pi", -1.00, 1.00).step(0.01).name("Initial θ2/π");
